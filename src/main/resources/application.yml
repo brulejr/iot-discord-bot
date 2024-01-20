@@ -1,0 +1,27 @@
+
+spring.application.name: iot-discord-bot
+spring.profiles.active: local
+
+management:
+  endpoints:
+    web:
+      base-path: /mgmt
+      exposure:
+        include: "*"
+    enabled-by-default: false
+  endpoint:
+    beans:
+      enabled: true
+    configprops:
+      enabled: true
+    env:
+      enabled: true
+    health:
+      enabled: true
+      show-details: always
+    info:
+      enabled: true
+    metrics:
+      enabled: true
+    shutdown:
+      enabled: true
