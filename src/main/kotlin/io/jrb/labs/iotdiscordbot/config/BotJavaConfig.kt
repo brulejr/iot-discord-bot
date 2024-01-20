@@ -23,46 +23,51 @@
  */
 package io.jrb.labs.iotdiscordbot.config
 
+import discord4j.core.DiscordClient
 import discord4j.core.DiscordClientBuilder
 import discord4j.core.GatewayDiscordClient
 import discord4j.core.event.domain.Event
 import io.jrb.labs.common.logging.LoggerDelegate
 import io.jrb.labs.iotdiscordbot.events.EventListener
-import org.springframework.beans.factory.annotation.Value
+import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import reactor.core.publisher.Mono
 
 @Configuration
+@EnableConfigurationProperties(DiscordConfig::class)
 class BotJavaConfig {
 
     private val log by LoggerDelegate()
 
     @Bean
     fun <T : Event> gatewayDiscordClient(
-        @Value("\${discord.token}") token: String,
+        discordConfig: DiscordConfig,
         eventListeners: List<EventListener<T>>
     ): GatewayDiscordClient {
+        val client = connectToDiscord(discordConfig)
+        eventListeners.forEach { listener -> registerEventListener(client, listener) }
+        return client
+    }
 
-        val client: GatewayDiscordClient? = DiscordClientBuilder
-            .create(token)
-            .build()
-            .login()
-            .block()
-        if (client != null) {
-            eventListeners.forEach { listener ->
-                log.info("Registering listener - {}", listener.javaClass.simpleName
-                )
-                client.on(listener.getEventType())
-                    .flatMap(listener::execute)
-                    .onErrorResume(listener::handleError)
-                    .subscribe()
-            }
-            return client
-        } else {
+    private fun connectToDiscord(discordConfig: DiscordConfig): GatewayDiscordClient {
+            val client = DiscordClient.builder(discordConfig.token)
+                .build()
+                .login()
+                .block()
+        if (client == null) {
             log.error("Unable to connect to Discord - client is null")
             throw IllegalStateException("Unable to connect to Discord - client is null");
         }
+        return client
+    }
 
+    private fun <T : Event> registerEventListener(client: GatewayDiscordClient, listener: EventListener<T>) {
+        log.info("Registering listener - {}", listener.javaClass.simpleName)
+        client.on(listener.getEventType())
+            .flatMap(listener::execute)
+            .onErrorResume(listener::handleError)
+            .subscribe()
     }
 
 }
