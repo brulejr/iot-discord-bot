@@ -45,7 +45,9 @@ class MessageCreateListener: MessageListener(), EventListener<MessageCreateEvent
     }
 
     override fun execute(event: MessageCreateEvent): Mono<Void> {
-        return processCommand(event.message)
+        return filterBotMessage(event.message)
+            .flatMap { extractContent(it) }
+            .then()
     }
 
 }

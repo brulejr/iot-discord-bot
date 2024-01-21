@@ -46,7 +46,9 @@ class MessageUpdateListener: MessageListener(), EventListener<MessageUpdateEvent
         return Mono.just(event)
             .filter(MessageUpdateEvent::isContentChanged)
             .flatMap(MessageUpdateEvent::getMessage)
-            .flatMap { super.processCommand(it) }
+            .flatMap { filterBotMessage(it) }
+            .flatMap { extractContent(it) }
+            .then()
     }
 
 }

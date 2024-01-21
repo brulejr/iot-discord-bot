@@ -33,27 +33,24 @@ abstract class MessageListener {
     private val log by LoggerDelegate()
 
     private val notFromBot = Predicate<Message> { m -> m.author.map { user -> !user.isBot }.orElse(false) }
-    private val isTodo = Predicate<Message> { message -> message.content == "!todo" }
+    private val isOnlyBotMentioned = Predicate<Message> { m ->
+        m.userMentions.size == 1 &&
+        m.userMentions.find { user -> user.username == "Brulenet" } != null
+    }
 
-    fun processCommand(eventMessage: Message): Mono<Void> {
-        return Mono.just(eventMessage)
-            .doOnNext { log.info("{}:: author={}, notFromBot={}, isTodo={}, content={}, message={}",
-                this.javaClass.simpleName,
-                it.author.map { a -> a.globalName },
-                notFromBot.test(it),
-                isTodo.test(it),
-                it.content,
-                it) }
-            .filter(notFromBot)
-            .filter(isTodo)
-            .flatMap(Message::getChannel)
-            .flatMap { channel ->
-                channel.createMessage("Things to do today:\n" +
-                        " - write a bot\n" +
-                        " - eat lunch\n" +
-                        " - play a game")
+    fun extractContent(eventMessage: Message): Mono<String> {
+        return Mono.just(eventMessage.content)
+            .map {
+                val regex = """<@\d+>""".toRegex()
+                it.replace(regex, "").trim()
             }
-            .then()
+            .doOnNext { log.info("{}:: content={}", this.javaClass.simpleName, it) }
+    }
+
+    fun filterBotMessage(eventMessage: Message): Mono<Message> {
+        return Mono.just(eventMessage)
+            .filter(notFromBot.and(isOnlyBotMentioned))
+            .doOnNext { log.info("{}:: content={}, message={}", this.javaClass.simpleName, it.content, it) }
     }
 
 }
