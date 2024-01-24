@@ -27,7 +27,9 @@ import discord4j.core.DiscordClient
 import discord4j.core.DiscordClientBuilder
 import discord4j.core.GatewayDiscordClient
 import discord4j.core.event.domain.Event
+import io.jrb.labs.common.discord4j.command.CommandListener
 import io.jrb.labs.common.logging.LoggerDelegate
+import io.jrb.labs.iotdiscordbot.commands.EchoCommand
 import io.jrb.labs.iotdiscordbot.events.EventListener
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
@@ -41,12 +43,18 @@ class BotJavaConfig {
     private val log by LoggerDelegate()
 
     @Bean
+    fun commandListener() = CommandListener(prefix="!!")
+        .on("echo", EchoCommand())
+
+    @Bean
     fun <T : Event> gatewayDiscordClient(
         discordConfig: DiscordConfig,
-        eventListeners: List<EventListener<T>>
+        eventListeners: List<EventListener<T>>,
+        commandListener: CommandListener
     ): GatewayDiscordClient {
         val client = connectToDiscord(discordConfig)
-        eventListeners.forEach { listener -> registerEventListener(client, listener) }
+//        eventListeners.forEach { listener -> registerEventListener(client, listener) }
+        client.on(commandListener).subscribe()
         return client
     }
 
