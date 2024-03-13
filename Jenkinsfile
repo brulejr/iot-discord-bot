@@ -4,6 +4,8 @@ pipeline {
         stage('Checkout') {
             steps {
                 echo 'Checking out…'
+                checkout scm
+                sh 'ls -lat'
             }
         }
         stage('Build') {
