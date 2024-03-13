@@ -11,7 +11,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building…'
-                sh 'gradle clean build'
+                sh './gradlew clean build'
                 junit "**/build/test-results/test/*.xml"
                 jacoco(
                     execPattern: 'build/jacoco/jacoco.exec'
