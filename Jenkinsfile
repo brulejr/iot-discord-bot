@@ -11,6 +11,11 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building…'
+                sh 'gradle clean build'
+                junit "**/build/test-results/test/*.xml"
+                jacoco(
+                    execPattern: 'build/jacoco/jacoco.exec'
+                )
             }
         }
         stage('Test') {
