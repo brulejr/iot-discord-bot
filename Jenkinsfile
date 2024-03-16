@@ -15,6 +15,9 @@ pipeline {
                 junit "**/build/test-results/test/*.xml"
                 jacoco(
                     execPattern: 'build/jacoco/test.exec'
+                    classPattern: '**/classes/kotlin/main',
+                    sourcePattern: '**/src/main/kotlin',
+                    sourceInclusionPattern: '**/*.kt'
                 )
             }
         }
