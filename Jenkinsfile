@@ -14,7 +14,7 @@ pipeline {
                 sh './gradlew clean build'
                 junit "**/build/test-results/test/*.xml"
                 jacoco(
-                    execPattern: 'build/jacoco/test.exec'
+                    execPattern: 'build/jacoco/test.exec',
                     sourcePattern: '**/src/main/kotlin',
                     sourceInclusionPattern: '**/*.kt'
                 )
