@@ -30,17 +30,21 @@ import org.reactivestreams.Publisher
 
 class EchoCommand: Command {
 
-    override fun name(): String = "echo"
+    override fun name(): String = COMMAND_NAME
 
     override fun apply(context: CommandContext): Publisher<CommandContext> {
         val myContext = if (isHelloMsg(context.remainder)) context.withDirectMessage() else context
         return myContext.sendMessage(MessageCreateSpec.builder()
-            .content("echo '${context.remainder}'")
+            .content("$COMMAND_NAME '${context.remainder}'")
             .build())
     }
 
     private fun isHelloMsg(content: String): Boolean {
         return content.startsWith("hello", ignoreCase = true)
+    }
+
+    companion object {
+        const val COMMAND_NAME = "echo"
     }
 
 }
