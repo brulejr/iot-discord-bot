@@ -62,8 +62,8 @@ jib {
 	to {
 		image = "$jibHost/iot-discord-bot-jib:$jibVersion"
 		auth {
-			username = System.getenv("NEXUS_PUBLISH_CREDS_USR")
-			password = System.getenv("NEXUS_PUBLISH_CREDS_PSW")
+			username = "test"
+			password = "test123"
 		}
 	}
 }
