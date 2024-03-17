@@ -49,7 +49,7 @@ tasks.withType<Test> {
 	useJUnitPlatform()
 }
 
-val jibVersion = "$version." + System.getenv("BRANCH_NAME") + "." + System.getenv("BUILD_NUMBER")
+val jibVersion = "$version." + System.getenv("BUILD_NUMBER")
 
 jib {
 	from {
