@@ -2,6 +2,7 @@ pipeline {
     agent any
     environment {
         NEXUS_CREDS = credentials('nexus-publish-creds')
+        BUILD_VERSION = "${version}.${BRANCH}.${BUILD_NUMBER}"
     }
     stages {
         stage('Checkout') {
@@ -25,7 +26,7 @@ pipeline {
         }
         stage('Publish') {
             steps {
-                echo "Publishing to ${NEXUS_PUBLISH_HOST} using ${NEXUS_CREDS_USR}//${NEXUS_CREDS_PSW}…"
+                echo "Publishing to ${NEXUS_PUBLISH_HOST}…"
                 sh './gradlew jib'
             }
         }

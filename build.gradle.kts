@@ -54,10 +54,10 @@ jib {
 		image = "azul/zulu-openjdk:17-jre"
 	}
 	to {
-		image = "dockerhub.brulenet.org/iot-discord-bot-jib:$version"
+		image = "dockerhub.brulenet.org/iot-discord-bot-jib:" + System.getenv("BUILD_VERSION}")
 		auth {
-			username = System.getenv("NEXUS_CREDS_USR") ?: error("NEXUS_CREDS_USR not found")
-			password = System.getenv("NEXUS_CREDS_PSW") ?: error("NEXUS_CREDS_PSW not found")
+			username = System.getenv("NEXUS_CREDS_USR")
+			password = System.getenv("NEXUS_CREDS_PSW")
 		}
 	}
 }
