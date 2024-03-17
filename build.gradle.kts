@@ -49,12 +49,14 @@ tasks.withType<Test> {
 	useJUnitPlatform()
 }
 
+val jibVersion = "$version." + System.getenv("BRANCH_NAME}") + "." + System.getenv("BUILD_NUMBER}")
+
 jib {
 	from {
 		image = "azul/zulu-openjdk:17-jre"
 	}
 	to {
-		image = "dockerhub.brulenet.org/iot-discord-bot-jib:" + System.getenv("BUILD_VERSION}")
+		image = "dockerhub.brulenet.org/iot-discord-bot-jib:$jibVersion"
 		auth {
 			username = System.getenv("NEXUS_CREDS_USR")
 			password = System.getenv("NEXUS_CREDS_PSW")

@@ -2,7 +2,6 @@ pipeline {
     agent any
     environment {
         NEXUS_CREDS = credentials('nexus-publish-creds')
-        BUILD_VERSION = "${version}.${BRANCH}.${BUILD_NUMBER}"
     }
     stages {
         stage('Checkout') {
