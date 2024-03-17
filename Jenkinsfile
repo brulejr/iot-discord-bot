@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        NEXUS_CREDS = credentials('nexus-publish-creds')
+        NEXUS_PUBLISH_CREDS = credentials('nexus-publish-creds')
     }
     stages {
         stage('Checkout') {
