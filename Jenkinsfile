@@ -23,7 +23,11 @@ pipeline {
         stage('Publish') {
             steps {
                 echo "Publishing to ${NEXUS_PUBLISH_HOST}…"
-                withCredentials([credentialsId: 'nexus-publish-creds', usernameVariable: 'NEXUS_PUBLISH_USERNAME', passwordVariable: 'NEXUS_PUBLISH_PASSWORD']) {
+                withCredentials([usernamePassword(
+                    credentialsId: 'nexus-publish-creds',
+                    usernameVariable: 'NEXUS_PUBLISH_USERNAME',
+                    passwordVariable: 'NEXUS_PUBLISH_PASSWORD'
+                )]) {
                     sh './gradlew jib'
                 }
             }
