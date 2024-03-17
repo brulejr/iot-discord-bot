@@ -1,10 +1,5 @@
 pipeline {
     agent any
-    environment {
-        NEXUS_PUBLISH_CREDS = credentials('nexus-publish-creds')
-        NEXUS_PUBLISH_HOST = credentials("nexus-publish-host")
-        NEXUS_PUBLISH_PORT = credentials("nexus-publish-port")
-    }
     stages {
         stage('Checkout') {
             steps {
@@ -27,8 +22,10 @@ pipeline {
         }
         stage('Publish') {
             steps {
-                echo 'Publishing…'
-                sh './gradlew jib'
+                echo "Publishing to ${NEXUS_PUBLISH_HOST}…"
+                withCredentials([credentialsId: 'nexus-publish-creds', usernameVariable: 'NEXUS_PUBLISH_USERNAME', passwordVariable: 'NEXUS_PUBLISH_PASSWORD']) {
+                    sh './gradlew jib'
+                }
             }
         }
         stage('Deploy') {

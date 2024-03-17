@@ -56,8 +56,8 @@ jib {
 	to {
 		image = "dockerhub.brulenet.org/iot-discord-bot-jib:$version"
 		auth {
-			username = System.getenv("NEXUS_PUBLISH_CREDS_USR")
-			password = System.getenv("NEXUS_PUBLISH_CREDS_PSW")
+			username = System.getenv("NEXUS_PUBLISH_USERNAME")
+			password = System.getenv("NEXUS_PUBLISH_PASSWORD")
 		}
 	}
 }
