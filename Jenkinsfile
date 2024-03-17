@@ -26,7 +26,7 @@ pipeline {
         }
         stage('Publish') {
             steps {
-                echo "Publishing to ${NEXUS_PUBLISH_HOST}…"
+                echo "Publishing ${BUILD_VERSION} to ${NEXUS_PUBLISH_HOST}…"
                 sh './gradlew jib'
             }
         }
