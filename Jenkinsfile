@@ -21,15 +21,12 @@ pipeline {
             }
         }
         stage('Publish') {
+            environment {
+                NEXUS_CREDS = credentials('nexus-publish-creds')
+            }
             steps {
-                withCredentials([usernamePassword(
-                    credentialsId: 'nexus-publish-creds',
-                    usernameVariable: 'NEXUS_PUBLISH_USERNAME',
-                    passwordVariable: 'NEXUS_PUBLISH_PASSWORD'
-                )]) {
-                    echo "Publishing to ${NEXUS_PUBLISH_HOST} using ${NEXUS_PUBLISH_USERNAME}//${NEXUS_PUBLISH_PASSWORD}…"
-                    sh './gradlew jib'
-                }
+                echo "Publishing to ${NEXUS_PUBLISH_HOST} using ${NEXUS_CREDS_USR}//${NEXUS_CREDS_PSW}…"
+                sh './gradlew jib'
             }
         }
         stage('Deploy') {
