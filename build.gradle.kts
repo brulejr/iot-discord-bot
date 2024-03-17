@@ -52,9 +52,6 @@ tasks.withType<Test> {
 val jibHost = System.getenv("NEXUS_PUBLISH_HOST")
 val jibVersion = "$version." + System.getenv("BUILD_NUMBER")
 
-println("user = " + System.getenv("NEXUS_PUBLISH_CREDS_USR"))
-println("pass = " + System.getenv("NEXUS_PUBLISH_CREDS_PSW"))
-
 jib {
 	from {
 		image = "azul/zulu-openjdk:17-jre"
@@ -62,8 +59,8 @@ jib {
 	to {
 		image = "$jibHost/iot-discord-bot-jib:$jibVersion"
 		auth {
-			username = "test"
-			password = "test123"
+			username = System.getenv("NEXUS_PUBLISH_CREDS_USR")
+			password = System.getenv("NEXUS_PUBLISH_CREDS_PSW")
 		}
 	}
 }
