@@ -54,7 +54,7 @@ val jibVersion = "$version." + System.getenv("BUILD_NUMBER")
 
 jib {
 	from {
-		image = "azul/zulu-openjdk:17-jre"
+		image = "openjdk:17-jdk-alpine"
 	}
 	to {
 		image = "$jibHost/iot-discord-bot-jib:$jibVersion"
