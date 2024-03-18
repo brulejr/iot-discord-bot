@@ -57,7 +57,7 @@ jib {
 		image = "openjdk:17-jdk-alpine"
 	}
 	to {
-		image = "$jibHost/iot-discord-bot-jib:$jibVersion"
+		image = "$jibHost/iot-discord-bot:$jibVersion"
 		auth {
 			username = System.getenv("NEXUS_PUBLISH_CREDS_USR")
 			password = System.getenv("NEXUS_PUBLISH_CREDS_PSW")
