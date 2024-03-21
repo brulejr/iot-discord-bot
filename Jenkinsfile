@@ -31,7 +31,8 @@ pipeline {
         }
         stage('Deploy') {
             steps {
-                echo 'Deploying...'
+                echo 'Updating deployment file...'
+                build job: 'iot-discord-bot-deployment', parameters: [string(name: 'IMAGETAG', value: env.BUILD_NUMBER)]
             }
         }
     }
