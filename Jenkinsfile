@@ -32,7 +32,10 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Updating deployment file...'
-                build job: 'iot-discord-bot-deployment', parameters: [string(name: 'IMAGETAG', value: env.BUILD_NUMBER)]
+                build job: 'iot-discord-bot-deployment', parameters: [
+                    string(name: 'IMAGE', value: 'iot-discord-bot'),
+                    string(name: 'IMAGETAG', value: env.BUILD_NUMBER)
+                ]
             }
         }
     }
